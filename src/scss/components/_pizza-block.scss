@@ -5,6 +5,11 @@
   text-align: center;
   margin-bottom: 65px;
 
+  &__wrapper {
+    display: flex;
+    justify-content: center;
+  }
+  
   &__image {
     width: 260px;
   }

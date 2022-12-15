@@ -1,5 +1,5 @@
 import React from 'react';
-const categories = ['Мясные', 'Вегетерианская', 'Гриль', 'Острые', 'Закрытые'];
+const categories = ['Все', 'Мясные', 'Вегетерианская', 'Гриль', 'Острые', 'Закрытые'];
 
 function Categories() {
   const [activeButton, setActiveButton] = React.useState(0);

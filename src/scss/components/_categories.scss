@@ -28,4 +28,14 @@
       }
     }
   }
+  
+  @media (max-width: 900px) {
+    overflow: scroll;
+    width: 100%;
+    
+    ul li {
+      background-color: #f9f9f9;
+      padding: 10px 15px;
+    }
+  }
 }
