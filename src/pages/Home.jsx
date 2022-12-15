@@ -7,21 +7,26 @@ import Skeleton from '../components/PizzaBlock/Skeleton';
 function Home() {
   const [pizzaItems, setPizzaItems] = React.useState([]);
   const [isLoading, setIsLoadindg] = React.useState(true);
+  const [activeButton, setActiveButton] = React.useState(0);
+
+  const onClickCategory = (index) => {
+    setActiveButton(index);
+  };
 
   React.useEffect(() => {
     setIsLoadindg(true);
-    fetch('https://639886ca044fa481d6a0dbc0.mockapi.io/pizza')
+    fetch('https://639886ca044fa481d6a0dbc0.mockapi.io/pizza?category=' + activeButton)
       .then((res) => res.json())
       .then((arr) => {
         setPizzaItems(arr);
         setIsLoadindg(false);
       });
-  }, []);
+  }, [activeButton]);
 
   return (
     <>
       <div className='content__top'>
-        <Categories />
+        <Categories activeButton={activeButton} onClickCategory={onClickCategory} />
         <Sort />
       </div>
       <h2 className='content__title'>Все пиццы</h2>

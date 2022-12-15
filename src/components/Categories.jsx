@@ -1,11 +1,7 @@
 import React from 'react';
 const categories = ['Все', 'Мясные', 'Вегетерианская', 'Гриль', 'Острые', 'Закрытые'];
 
-function Categories() {
-  const [activeButton, setActiveButton] = React.useState(0);
-  const onClickCategory = (index) => {
-    setActiveButton(index);
-  };
+function Categories({ activeButton, onClickCategory }) {
   return (
     <div className='categories'>
       <ul>
