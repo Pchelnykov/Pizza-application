@@ -23,9 +23,10 @@ body {
   }
 
   &__items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 6px;
+    grid-template-columns: repeat(4, 1fr);
   }
 
   &__top {
