@@ -7,27 +7,37 @@ import Skeleton from '../components/PizzaBlock/Skeleton';
 function Home() {
   const [pizzaItems, setPizzaItems] = React.useState([]);
   const [isLoading, setIsLoadindg] = React.useState(true);
-  const [activeButton, setActiveButton] = React.useState(0);
+  const [categoryId, setCategoryId] = React.useState(0);
+  const [changeSort, setChangeSort] = React.useState({
+    name: 'популярности',
+    sortProperty: 'rating',
+  });
 
   const onClickCategory = (index) => {
-    setActiveButton(index);
+    setCategoryId(index);
   };
 
   React.useEffect(() => {
     setIsLoadindg(true);
-    fetch('https://639886ca044fa481d6a0dbc0.mockapi.io/pizza?category=' + activeButton)
+    fetch(
+      `https://639886ca044fa481d6a0dbc0.mockapi.io/pizza?${
+        categoryId > 0 ? `category=${categoryId}` : ''
+      }&sortBy=${changeSort.sortProperty.replace('-', '')}&order=${
+        changeSort.sortProperty.includes('-') ? 'ask' : 'desc'
+      }`,
+    )
       .then((res) => res.json())
       .then((arr) => {
         setPizzaItems(arr);
         setIsLoadindg(false);
       });
-  }, [activeButton]);
+  }, [categoryId, changeSort]);
 
   return (
     <>
       <div className='content__top'>
-        <Categories activeButton={activeButton} onClickCategory={onClickCategory} />
-        <Sort />
+        <Categories categoryId={categoryId} onClickCategory={onClickCategory} />
+        <Sort changeSort={changeSort} setChangeSort={setChangeSort} />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>

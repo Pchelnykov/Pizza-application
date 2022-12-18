@@ -1,7 +1,7 @@
 import React from 'react';
 const categories = ['Все', 'Мясные', 'Вегетерианская', 'Гриль', 'Острые', 'Закрытые'];
 
-function Categories({ activeButton, onClickCategory }) {
+function Categories({ categoryId, onClickCategory }) {
   return (
     <div className='categories'>
       <ul>
@@ -9,7 +9,7 @@ function Categories({ activeButton, onClickCategory }) {
           <li
             key={i}
             onClick={() => onClickCategory(i)}
-            className={activeButton === i ? 'active' : ''}
+            className={categoryId === i ? 'active' : ''}
           >
             {value}
           </li>
