@@ -40,7 +40,7 @@ function Home() {
 
   const pizzas = pizzaItems
     .filter((obj) => {
-      if (obj.title.includes(searchValue)) {
+      if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
         return true;
       }
       return false;
