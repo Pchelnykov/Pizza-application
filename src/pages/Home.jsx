@@ -6,16 +6,11 @@ import Skeleton from '../components/PizzaBlock/Skeleton';
 import { setCategoryId } from '../Redux/slices/filterSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-// import { AppContext } from '../App';
+import { AppContext } from '../App';
 
 function Home() {
   const [pizzaItems, setPizzaItems] = React.useState([]);
   const [isLoading, setIsLoadindg] = React.useState(true);
-  // const [changeSort, setChangeSort] = React.useState({
-  //   name: 'популярности',
-  //   sortProperty: 'rating',
-  // });
-
   const dispatch = useDispatch();
   const categoryId = useSelector((state) => state.filterSlice.categoryId);
   const changeSort = useSelector((state) => state.filterSlice.sort);
@@ -24,35 +19,32 @@ function Home() {
     dispatch(setCategoryId(id));
   };
 
-  // const { searchValue } = React.useContext(AppContext);
-  // const [categoryId, setCategoryId] = React.useState(0);
-  // const onClickCategory = (index) => {
-  //   setCategoryId(index);
-  // };
+  const { searchValue } = React.useContext(AppContext);
 
   React.useEffect(() => {
     setIsLoadindg(true);
-    fetch(
-      `https://639886ca044fa481d6a0dbc0.mockapi.io/pizza?${
-        categoryId > 0 ? `category=${categoryId}` : ''
-      }&sortBy=${changeSort.sortProperty.replace('-', '')}&order=${
-        changeSort.sortProperty.includes('-') ? 'ask' : 'desc'
-      }`,
-    )
-      .then((res) => res.json())
-      .then((arr) => {
-        setPizzaItems(arr);
+
+    axios
+      .get(
+        `https://639886ca044fa481d6a0dbc0.mockapi.io/pizza?${
+          categoryId > 0 ? `category=${categoryId}` : ''
+        }&sortBy=${changeSort.sortProperty.replace('-', '')}&order=${
+          changeSort.sortProperty.includes('-') ? 'ask' : 'desc'
+        }`,
+      )
+      .then((res) => {
+        setPizzaItems(res.data);
         setIsLoadindg(false);
       });
-  }, [categoryId, changeSort]);
+  }, [categoryId, changeSort, searchValue]);
 
   const pizzas = pizzaItems
-    // .filter((obj) => {
-    //   if (obj.title.includes(searchValue)) {
-    //     return true;
-    //   }
-    //   return false;
-    // })
+    .filter((obj) => {
+      if (obj.title.includes(searchValue)) {
+        return true;
+      }
+      return false;
+    })
     .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
 
   const skeletons = [...Array(6)].map((_, i) => <Skeleton key={i} />);
