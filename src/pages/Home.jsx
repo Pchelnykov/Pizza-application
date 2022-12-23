@@ -3,19 +3,32 @@ import Sort from '../components/Sort';
 import Categories from '../components/Categories';
 import PizzaBlock from '../components/PizzaBlock/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
+import { setCategoryId } from '../Redux/slices/filterSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+// import { AppContext } from '../App';
 
 function Home() {
   const [pizzaItems, setPizzaItems] = React.useState([]);
   const [isLoading, setIsLoadindg] = React.useState(true);
-  const [categoryId, setCategoryId] = React.useState(0);
-  const [changeSort, setChangeSort] = React.useState({
-    name: 'популярности',
-    sortProperty: 'rating',
-  });
+  // const [changeSort, setChangeSort] = React.useState({
+  //   name: 'популярности',
+  //   sortProperty: 'rating',
+  // });
 
-  const onClickCategory = (index) => {
-    setCategoryId(index);
+  const dispatch = useDispatch();
+  const categoryId = useSelector((state) => state.filterSlice.categoryId);
+  const changeSort = useSelector((state) => state.filterSlice.sort);
+
+  const onChangeCategoryId = (id) => {
+    dispatch(setCategoryId(id));
   };
+
+  // const { searchValue } = React.useContext(AppContext);
+  // const [categoryId, setCategoryId] = React.useState(0);
+  // const onClickCategory = (index) => {
+  //   setCategoryId(index);
+  // };
 
   React.useEffect(() => {
     setIsLoadindg(true);
@@ -33,18 +46,25 @@ function Home() {
       });
   }, [categoryId, changeSort]);
 
+  const pizzas = pizzaItems
+    // .filter((obj) => {
+    //   if (obj.title.includes(searchValue)) {
+    //     return true;
+    //   }
+    //   return false;
+    // })
+    .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+
+  const skeletons = [...Array(6)].map((_, i) => <Skeleton key={i} />);
+
   return (
     <>
       <div className='content__top'>
-        <Categories categoryId={categoryId} onClickCategory={onClickCategory} />
-        <Sort changeSort={changeSort} setChangeSort={setChangeSort} />
+        <Categories categoryId={categoryId} onClickCategory={onChangeCategoryId} />
+        <Sort />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
-      <div className='content__items'>
-        {isLoading
-          ? [...Array(6)].map((_, i) => <Skeleton key={i} />)
-          : pizzaItems.map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
-      </div>
+      <div className='content__items'>{isLoading ? skeletons : pizzas}</div>
     </>
   );
 }
