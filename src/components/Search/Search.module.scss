@@ -1,3 +1,8 @@
+.root {
+    position: relative;
+    left: -20px;
+}
+
 .input {
     width: 400px;
     border: 1px solid rgba(0,0,0, 0.1);
@@ -5,8 +10,30 @@
     padding: 10px 20px;
     font-size: 20px;
     transition: ease-in-out 0.3s;
+    padding-left: 43px;
     &:focus {
         border: 1px solid rgba(0,0,0, 0.2);
         width: 440px;
+    }
+}
+
+.search__icon {
+    position: relative;
+    width: 35px;
+    height: 35px;
+    top: 12px;
+    left: 45px;
+}
+
+.icon {
+    position: absolute;
+    top: 16px;
+    right: 14px;
+    width: 24px;
+    height: 24px;
+    opacity: 0.5;
+    cursor: pointer;
+    &:hover {
+        opacity: 1;
     }
 }

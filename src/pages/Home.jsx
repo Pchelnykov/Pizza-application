@@ -7,10 +7,12 @@ import { setCategoryId } from '../Redux/slices/filterSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { AppContext } from '../App';
+import Pagination from '../components/Pagination';
 
 function Home() {
   const [pizzaItems, setPizzaItems] = React.useState([]);
   const [isLoading, setIsLoadindg] = React.useState(true);
+  const [currentPage, setCurrentPage] = React.useState(1);
   const dispatch = useDispatch();
   const categoryId = useSelector((state) => state.filterSlice.categoryId);
   const changeSort = useSelector((state) => state.filterSlice.sort);
@@ -26,7 +28,7 @@ function Home() {
 
     axios
       .get(
-        `https://639886ca044fa481d6a0dbc0.mockapi.io/pizza?${
+        `https://639886ca044fa481d6a0dbc0.mockapi.io/pizza?page=${currentPage}&limit=4&${
           categoryId > 0 ? `category=${categoryId}` : ''
         }&sortBy=${changeSort.sortProperty.replace('-', '')}&order=${
           changeSort.sortProperty.includes('-') ? 'ask' : 'desc'
@@ -36,7 +38,7 @@ function Home() {
         setPizzaItems(res.data);
         setIsLoadindg(false);
       });
-  }, [categoryId, changeSort, searchValue]);
+  }, [categoryId, changeSort, searchValue, currentPage]);
 
   const pizzas = pizzaItems
     .filter((obj) => {
@@ -57,6 +59,7 @@ function Home() {
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>{isLoading ? skeletons : pizzas}</div>
+      <Pagination onChangePage={(number) => setCurrentPage(number)} />
     </>
   );
 }
