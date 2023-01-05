@@ -10,10 +10,11 @@ import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../App';
 import Pagination from '../components/Pagination';
+import { setItems } from '../Redux/slices/pizzaSlice';
 
 function Home() {
   const navigate = useNavigate();
-  const [pizzaItems, setPizzaItems] = React.useState([]);
+  // const [pizzaItems, setPizzaItems] = React.useState([]);
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
   const [isLoading, setIsLoadindg] = React.useState(true);
@@ -21,6 +22,7 @@ function Home() {
   const dispatch = useDispatch();
   const categoryId = useSelector((state) => state.filterSlice.categoryId);
   const changeSort = useSelector((state) => state.filterSlice.sort);
+  const pizzaItems = useSelector((state) => state.pizza.items);
   const { searchValue } = React.useContext(AppContext);
 
   const onChangeCategoryId = (id) => {
@@ -30,18 +32,20 @@ function Home() {
   const fetchPizzas = async () => {
     setIsLoadindg(true);
 
-    await axios
-      .get(
+    try {
+      const { data } = await axios.get(
         `https://639886ca044fa481d6a0dbc0.mockapi.io/pizza?page=${currentPage}&limit=4&${
           categoryId > 0 ? `category=${categoryId}` : ''
         }&sortBy=${changeSort.sortProperty.replace('-', '')}&order=${
           changeSort.sortProperty.includes('-') ? 'ask' : 'desc'
         }`,
-      )
-      .then((res) => {
-        setPizzaItems(res.data);
-        setIsLoadindg(false);
-      });
+      );
+      dispatch(setItems(data));
+    } catch (error) {
+      console.log(error, 'ERROR');
+    } finally {
+      setIsLoadindg(false);
+    }
   };
 
   React.useEffect(() => {
