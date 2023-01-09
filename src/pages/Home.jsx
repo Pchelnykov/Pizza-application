@@ -6,7 +6,7 @@ import Skeleton from '../components/PizzaBlock/Skeleton';
 import { selectSort, setCategoryId, setFilters } from '../Redux/slices/filterSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 // import { AppContext } from '../App';
 import Pagination from '../components/Pagination';
 import { fetchPizzasStatus, selectPizzaData } from '../Redux/slices/pizzaSlice';
@@ -77,7 +77,11 @@ function Home() {
       }
       return false;
     })
-    .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+    .map((obj) => (
+      <Link to={`/pizza/${obj.id}`} key={obj.id}>
+        <PizzaBlock {...obj} />
+      </Link>
+    ));
 
   const skeletons = [...Array(6)].map((_, i) => <Skeleton key={i} />);
 
