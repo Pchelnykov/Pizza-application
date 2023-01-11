@@ -11,24 +11,25 @@ import { useNavigate, Link } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import { fetchPizzasStatus, selectPizzaData } from '../Redux/slices/pizzaSlice';
 
-function Home() {
+const Home: React.FC = () => {
   const navigate = useNavigate();
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
   const [currentPage, setCurrentPage] = React.useState(1);
   const dispatch = useDispatch();
-  const categoryId = useSelector((state) => state.filterSlice.categoryId);
+  const categoryId = useSelector((state: any) => state.filterSlice.categoryId);
   const changeSort = useSelector(selectSort);
-  const searchValue = useSelector((state) => state.filterSlice.searchValue);
+  const searchValue = useSelector((state: any) => state.filterSlice.searchValue);
   const { items, status } = useSelector(selectPizzaData);
   // const { searchValue } = React.useContext(AppContext);
 
-  const onChangeCategoryId = (id) => {
+  const onChangeCategoryId = (id: number) => {
     dispatch(setCategoryId(id));
   };
 
   const fetchPizzas = async () => {
     dispatch(
+      // @ts-ignore
       fetchPizzasStatus({
         currentPage,
         changeSort,
@@ -71,13 +72,13 @@ function Home() {
   }, [categoryId, currentPage, changeSort]);
 
   const pizzas = items
-    .filter((obj) => {
+    .filter((obj: any) => {
       if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
         return true;
       }
       return false;
     })
-    .map((obj) => (
+    .map((obj: any) => (
       <Link to={`/pizza/${obj.id}`} key={obj.id}>
         <PizzaBlock {...obj} />
       </Link>
@@ -86,7 +87,7 @@ function Home() {
   const skeletons = [...Array(6)].map((_, i) => <Skeleton key={i} />);
 
   return (
-    <>
+    <div className='container'>
       <div className='content__top'>
         <Categories categoryId={categoryId} onClickCategory={onChangeCategoryId} />
         <Sort />
@@ -101,8 +102,8 @@ function Home() {
         <div className='content__items'>{status === 'loading' ? skeletons : pizzas}</div>
       )}
 
-      <Pagination onChangePage={(number) => setCurrentPage(number)} />
-    </>
+      <Pagination onChangePage={(number: number) => setCurrentPage(number)} />
+    </div>
   );
 }
 

@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItem, selectCartItem } from '../../Redux/slices/cartSlice';
 const typeName = ['тонкая', 'традиционная'];
 
-function PizzaBlock({ id, title, price, onAddToButton, sizes, imageUrl, types }) {
+type PizzaBlockProps = {id: string, title: string, price: number, sizes: number[], imageUrl: string, types: number[]}
+
+const PizzaBlock: React.FC<PizzaBlockProps> = ({ id, title, price, sizes, imageUrl, types }) => {
   const dispatch = useDispatch();
   const cartItem = useSelector(selectCartItem(id));
   const addedCount = cartItem ? cartItem.count : 0;
